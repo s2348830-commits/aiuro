@@ -1,0 +1,12 @@
+/* PC・大画面向け。ゲームキャンバスをブラウザー表示領域いっぱいに広げる */
+@media (min-width: 901px) and (hover: hover) and (pointer: fine) {
+  #wrap { min-width: 100vw; min-height: 100vh; }
+  #game { width: 100vw; height: 100vh; height: 100dvh; }
+  #touchControls { display: none !important; }
+  #gameover h1 { letter-spacing: 0.35em; }
+}
+
+/* タブレットやタッチ対応PCでも横幅を使い切る */
+@media (min-width: 901px) {
+  #wrap, #game { width: 100vw; height: 100vh; height: 100dvh; }
+}

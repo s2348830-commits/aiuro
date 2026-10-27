@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#02060a">
+  <title>VOID//SHIFT</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="pc.css">
+  <link rel="stylesheet" href="phone.css">
+  <link rel="stylesheet" href="boss.css">
+</head>
+<body>
+  <div id="wrap">
+    <canvas id="game" width="960" height="540" aria-label="VOID//SHIFT ゲーム画面"></canvas>
+    <!-- オンボロイドはCSSで構成された背景干渉レイヤー。操作イベントは奪わない。 -->
+    <div id="bossWorld" class="boss-world" data-attack="idle" data-phase="idle" data-side="left" aria-hidden="true">
+      <div class="boss-rift"></div>
+      <div class="boss-world-noise"></div>
+      <div class="boss-entity">
+        <div class="boss-shoulders"></div>
+        <div class="boss-torso"><i class="boss-core"></i><i class="boss-seam seam-a"></i><i class="boss-seam seam-b"></i></div>
+        <div class="boss-neck"></div>
+        <div class="boss-head">
+          <i class="boss-crown crown-a"></i><i class="boss-crown crown-b"></i>
+          <div class="boss-eye boss-eye-left"><i></i></div><div class="boss-eye boss-eye-right"><i></i></div>
+          <div class="boss-mouth"><i></i><i></i><i></i><i></i><i></i></div>
+        </div>
+        <div class="boss-arm boss-arm-left"><div class="boss-upper-arm"></div><div class="boss-forearm"></div><div class="boss-hand"><i></i><i></i><i></i><i></i><b></b></div></div>
+        <div class="boss-arm boss-arm-right"><div class="boss-upper-arm"></div><div class="boss-forearm"></div><div class="boss-hand"><i></i><i></i><i></i><i></i><b></b></div></div>
+        <div class="boss-rocket-rack" aria-hidden="true">
+          <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+        </div>
+      </div>
+      <div id="bossWarning" class="boss-warning"></div>
+      <div id="bossLaserBeam" class="boss-laser-beam"></div>
+      <div class="boss-laser-impact"></div>
+      <div class="boss-nameplate"><span>BACKGROUND INTERFERENCE</span><strong>オンボロイド <small>ONBOROID</small></strong></div>
+      <div class="boss-defeat-stamp">BACKGROUND COLLAPSED</div>
+    </div>
+    <div id="touchControls" aria-label="スマートフォン操作">
+      <div id="touchJoystick" class="touch-joystick" aria-label="移動アナログスティック">
+        <div id="touchJoystickBase" class="touch-joystick-base">
+          <div id="touchJoystickKnob" class="touch-joystick-knob"></div>
+        </div>
+      </div>
+      <div class="touch-buttons" aria-label="アクション操作">
+        <button class="touch-btn touch-skill" id="touchSkill" type="button" aria-label="スキル">SKILL</button>
+        <button class="touch-btn touch-ult" id="touchUlt" type="button" aria-label="必殺技">ULT</button>
+        <button class="touch-btn touch-jump" id="touchJump" type="button" aria-label="ジャンプ">JUMP</button>
+        <button class="touch-btn touch-dodge" id="touchDodge" type="button" aria-label="回避">DODGE</button>
+      </div>
+      <div class="touch-tap-hint" aria-hidden="true">画面タップ：攻撃 / 長押し：強攻撃</div>
+    </div>
+    <!-- HPが0になったときに表示するゲームオーバー画面 -->
+    <div id="gameover" class="hidden">
+      <h1>GAME OVER</h1>
+      <button id="retry" type="button">リトライ</button>
+      <button id="toTitle" type="button">TITLE</button>
+    </div>
+    <!-- ESCで開く一時停止メニュー。表示中はゲーム更新が完全に停止する。 -->
+    <div id="pauseMenu" class="hidden" aria-label="一時停止メニュー">
+      <section id="pauseMainPanel" class="pause-panel" aria-labelledby="pauseTitle">
+        <p class="pause-kicker">SYSTEM PAUSED</p>
+        <h1 id="pauseTitle">PAUSE</h1>
+        <p class="pause-subtitle">ゲームは一時停止中です</p>
+        <button id="pauseContinue" type="button">ゲームに戻る</button>
+        <button id="pauseSettings" type="button">設定</button>
+        <button id="pauseHome" type="button">ホームに戻る</button>
+        <button id="pauseRestart" type="button">リスタート</button>
+        <p class="pause-hint">ESC：再開</p>
+      </section>
+      <section id="pauseSettingsPanel" class="pause-panel pause-settings hidden" aria-labelledby="pauseSettingsTitle">
+        <p class="pause-kicker">SYSTEM CONFIGURATION</p>
+        <h1 id="pauseSettingsTitle">設定</h1>
+        <label class="pause-volume" for="pauseVolume">
+          <span>音量</span><strong id="pauseVolumeValue">60%</strong>
+          <input id="pauseVolume" type="range" min="0" max="10" step="1" value="6">
+        </label>
+        <label class="pause-check"><input id="pauseShake" type="checkbox" checked> <span>画面揺れ</span></label>
+        <label class="pause-check"><input id="pauseFlash" type="checkbox" checked> <span>フラッシュ演出</span></label>
+        <button id="pauseSettingsBack" type="button">戻る</button>
+        <p class="pause-hint">設定は自動保存されます</p>
+      </section>
+    </div>
+  </div>
+  <script src="audio.js"></script>
+  <script src="ui.js"></script>
+  <script src="title.js"></script>
+  <script src="game.js"></script>
+  <!-- 任意の開発者モード。debug.js を削除するとメニュー項目も自動的に無効になります。 -->
+  <script src="debug.js"></script>
+</body>
+</html>

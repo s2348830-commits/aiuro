@@ -1,0 +1,229 @@
+/* 全端末共通の基本設定。画面サイズの調整は pc.css / phone.css で行う */
+:root {
+  color-scheme: dark;
+  --cyan: #3df2ff;
+  --orange: #ff8a1f;
+  --night: #02060a;
+  font-family: "Orbitron", "Rajdhani", "Segoe UI", "Hiragino Sans", sans-serif;
+}
+
+* { box-sizing: border-box; }
+/* 右クリック後のブラウザ選択色・クリック時の青いタップハイライトを抑える */
+html, body, #wrap, #game, button, .touch-btn {
+  -webkit-tap-highlight-color: transparent;
+}
+#wrap, #game, button, .touch-btn, .pause-panel, #gameover {
+  -webkit-user-select: none;
+  user-select: none;
+}
+::selection { background: transparent; color: inherit; }
+button:focus:not(:focus-visible) { outline: none; }
+/* 戦闘中だけカーソルを隠す。ホーム/設定/ポーズ画面では通常表示へ戻す */
+body.combat-active, body.combat-active #wrap, body.combat-active #game { cursor: none !important; }
+html, body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background: var(--night);
+  color: #e8ecf4;
+  overscroll-behavior: none;
+}
+body { position: fixed; inset: 0; }
+#wrap {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  background: var(--night);
+}
+#game {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  margin: 0;
+  padding: 0;
+  box-shadow: none;
+  touch-action: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ゲームオーバー画面はゲーム画面の上に重ねる */
+#gameover {
+  position: absolute;
+  z-index: 10;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(12px, 3vh, 24px);
+  background: rgba(2, 4, 8, 0.88);
+  padding: 20px;
+}
+#gameover h1 {
+  margin: 0;
+  color: #e9fbff;
+  font-size: clamp(24px, 5vw, 48px);
+  font-weight: 400;
+  letter-spacing: 0.25em;
+  text-align: center;
+  text-shadow: 0 0 18px var(--cyan);
+}
+#retry, #toTitle {
+  min-height: 44px;
+  padding: 12px clamp(22px, 5vw, 48px);
+  color: var(--cyan);
+  background: rgba(61, 242, 255, 0.08);
+  border: 1px solid var(--cyan);
+  border-radius: 0;
+  font: inherit;
+  letter-spacing: 0.2em;
+  cursor: pointer;
+  clip-path: polygon(12px 0, 100% 0, calc(100% - 12px) 100%, 0 100%);
+  touch-action: manipulation;
+}
+#retry:hover, #toTitle:hover { background: var(--cyan); color: var(--night); }
+#retry:focus-visible, #toTitle:focus-visible { outline: 3px solid #ffd43b; outline-offset: 3px; }
+.hidden { display: none !important; }
+
+/* タッチ操作はスマートフォン向けCSSで配置し、ここでは共通の見た目だけ定義 */
+#touchControls { display: none; position: absolute; z-index: 5; inset: 0; pointer-events: none; user-select: none; }
+.touch-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #dffcff;
+  background: rgba(3, 12, 20, 0.72);
+  border: 1px solid rgba(61, 242, 255, 0.62);
+  border-radius: 12px;
+  box-shadow: inset 0 0 14px rgba(61, 242, 255, 0.08), 0 0 12px rgba(0, 0, 0, 0.22);
+  font: 700 12px "Orbitron", "Segoe UI", sans-serif;
+  letter-spacing: 0.03em;
+  padding: 0;
+  pointer-events: auto;
+  touch-action: none;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+.touch-btn:active, .touch-btn.is-pressed { background: rgba(61, 242, 255, 0.3); border-color: #e9fbff; }
+.touch-skill { border-color: rgba(61,242,255,.9); color: var(--cyan); }
+.touch-ult { border-color: rgba(255,138,31,.9); color: var(--orange); }
+.touch-attack { border-color: var(--orange); color: #fff0dc; box-shadow: inset 0 0 18px rgba(255,138,31,.18), 0 0 16px rgba(255,138,31,.12); }
+
+/* ESCで開く一時停止メニュー */
+#pauseMenu {
+  position: absolute;
+  z-index: 20;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: max(16px, env(safe-area-inset-top)) max(14px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left));
+  overflow: auto;
+  background: rgba(1, 4, 9, .78);
+  backdrop-filter: blur(7px);
+  -webkit-backdrop-filter: blur(7px);
+}
+.pause-panel {
+  width: min(420px, 100%);
+  max-height: 100%;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 10px;
+  padding: clamp(22px, 4vh, 34px) clamp(18px, 5vw, 36px) 22px;
+  border: 1px solid rgba(61, 242, 255, .72);
+  background: linear-gradient(145deg, rgba(4, 16, 24, .98), rgba(2, 5, 11, .98));
+  box-shadow: 0 0 28px rgba(61, 242, 255, .12), inset 0 0 26px rgba(61, 242, 255, .035);
+  clip-path: polygon(16px 0, 100% 0, 100% calc(100% - 16px), calc(100% - 16px) 100%, 0 100%, 0 16px);
+}
+.pause-kicker {
+  margin: 0;
+  color: var(--cyan);
+  font-size: 10px;
+  letter-spacing: .22em;
+  text-align: center;
+}
+.pause-panel h1 {
+  margin: 0;
+  color: #e9fbff;
+  font-size: clamp(28px, 5vw, 40px);
+  font-weight: 500;
+  letter-spacing: .18em;
+  text-align: center;
+  text-shadow: 0 0 16px rgba(61, 242, 255, .36);
+}
+.pause-subtitle, .pause-hint {
+  margin: 0 0 8px;
+  color: rgba(233, 251, 255, .58);
+  font-size: 11px;
+  text-align: center;
+}
+.pause-panel button {
+  min-height: 44px;
+  padding: 10px 16px;
+  border: 1px solid rgba(61, 242, 255, .55);
+  background: rgba(61, 242, 255, .055);
+  color: #e9fbff;
+  font: inherit;
+  font-size: 13px;
+  letter-spacing: .08em;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.pause-panel button:hover, .pause-panel button:focus-visible {
+  outline: none;
+  color: #02060a;
+  background: var(--cyan);
+  border-color: #e9fbff;
+}
+.pause-panel #pauseHome { border-color: rgba(255, 138, 31, .65); }
+.pause-panel #pauseHome:hover, .pause-panel #pauseHome:focus-visible { background: var(--orange); }
+.pause-volume {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px;
+  align-items: center;
+  margin: 8px 0 12px;
+  color: #e9fbff;
+  font-size: 14px;
+}
+.pause-volume strong { color: var(--cyan); font-size: 12px; }
+.pause-volume input { grid-column: 1 / -1; width: 100%; accent-color: var(--cyan); cursor: pointer; }
+.pause-check {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 38px;
+  color: #e9fbff;
+  font-size: 13px;
+  cursor: pointer;
+}
+.pause-check input { width: 18px; height: 18px; accent-color: var(--cyan); }
+.pause-settings .pause-hint { margin-top: 2px; }
+@media (max-height: 480px) {
+  .pause-panel { gap: 6px; padding-top: 12px; padding-bottom: 12px; }
+  .pause-panel h1 { font-size: 24px; }
+  .pause-panel button { min-height: 36px; padding: 7px 12px; }
+}
+
+
+/* 任意の debug.js が読み込まれた時だけ表示される開発者モード */
+.pause-developer { border-color: rgba(61, 242, 255, .72); }
+.debug-option { gap: 10px; min-height: 42px; padding: 7px 9px; border: 1px solid rgba(233,251,255,.14); background: rgba(233,251,255,.025); }
+.debug-option strong { font-weight: 700; }
+.debug-blue strong { color: #2f9bff; }
+.debug-red strong { color: #ff354f; }
+.debug-green strong { color: #35ff79; }
+.debug-legend { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; color: rgba(233,251,255,.62); font: 9px monospace; margin: 2px 0 8px; }
+.debug-legend span { display: inline-flex; align-items: center; gap: 5px; }
+.debug-dot { width: 8px; height: 8px; display: inline-block; border-radius: 50%; }
+.debug-dot.blue { background: #2f9bff; box-shadow: 0 0 7px #2f9bff; }
+.debug-dot.red { background: #ff354f; box-shadow: 0 0 7px #ff354f; }
+.debug-dot.green { background: #35ff79; box-shadow: 0 0 7px #35ff79; }
